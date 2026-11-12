@@ -1,0 +1,24 @@
+# TrackTXV —— 腾讯视频追更日历追踪器
+# 直接拉公开镜像运行；TXV_WEBHOOK_URL 等密钥通过环境变量注入，不写死。
+services:
+  tracktxv:
+    image: fromeverywhere/tracktxv:0.4
+    container_name: tracktxv
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      TZ: "Asia/Shanghai"
+      TXV_CRON: "0 9 * * *"
+      TXV_RUN_ON_START: "true"
+      TXV_WEBHOOK_URL: "${TXV_WEBHOOK_URL:-}"
+      TXV_WEBHOOK_FORMAT: "${TXV_WEBHOOK_FORMAT:-text}"
+      TXV_WEBHOOK_TITLE: "${TXV_WEBHOOK_TITLE:-腾讯视频·今日追更}"
+      TXV_AUTH_USER: "${TXV_AUTH_USER:-admin}"
+      TXV_AUTH_PASSWORD: "${TXV_AUTH_PASSWORD:-tracktxv}"
+      TXV_DATA_DIR: "/data"
+    volumes:
+      - tracktxv_data:/data
+
+volumes:
+  tracktxv_data:
